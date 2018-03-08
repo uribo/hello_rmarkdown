@@ -1,13 +1,16 @@
 Hello R Markdonw :)
 ===================
 
-Author: Shinya Uryu ([@uribo](https://github.com/uribo))
+Author: Shinya Uryu ([\@uribo](https://github.com/uribo))
 
-[01 Introduction](01_hello.Rmd)
-[02 Basic Usage](02_basic.Rmd)
-[03 Several Output Formats]()
-[04 Presentations]()
-[05 Shiny + widgets]()
+![](inst/slide_overview.jpg)
+
+
+- [01 Introduction](01_hello.Rmd)
+- [02 Basic Usage](02_basic.Rmd)
+- [03 Several Output Formats]()
+- [04 Presentations]()
+- [05 Shiny + widgets]()
 
 ## Running
 
