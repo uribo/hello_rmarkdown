@@ -1,0 +1,36 @@
+---
+title: "はじめてのR Markdown"
+author: "Shinya Uryu"
+date: "2018-03-08"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+これはR Markdown形式のファイルです。ファイルの中でRをはじめとしたプログラミングスクリプトの実行とマークダウン形式による文章の記述が可能です。マークダウンはHTMLやPDF、マイクロソフトのワードなどを作成するための簡易的な書式構文の一種です。R Markdownについての詳細は<http://rmarkdown.rstudio.com>をご覧ください。
+
+RStudioを利用している場合、上部の **Knit** ボタンをクリックするとファイル中のチャンク部分で記述されたRスクリプトが実行され、テキストとコードの混ざったドキュメントが生成されます。チャンクでのRスクリプトの埋め込みは次のように行います。
+
+```{r iris}
+summary(iris)
+```
+
+## 図の埋め込み
+
+作図の結果も直接埋め込めます。
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+チャンクコードには多様なオプションがありますが、先ほどのように `echo = FALSE` とした時はスクリプトは実行されますが、実行のためのスクリプトはドキュメントでは表示されません。
+
+## knit
+
+Rmdファイルを目的のファイル形式へ出力することを、knitするなどと呼びます。knitはRStudioのエディタタブの上部にある"Knit"ボタンや`rmarkdown::render("01_hello.Rmd")`のような対象のファイルを引数に与えた関数を実行することで実行されます。
+
+"01_hello.Rmd"ではファイルの先頭に記述したYAMLヘッダーの部分でhtmlへの出力を指定しているため、`rmarkdown::render()`を実行するとRのコードとその実行結果を含んだhtmlファイルが生成されます。
