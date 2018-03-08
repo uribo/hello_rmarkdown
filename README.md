@@ -3,6 +3,12 @@ Hello R Markdonw :)
 
 Author: Shinya Uryu ([@uribo](https://github.com/uribo))
 
+[01 Introduction](01_hello.Rmd)
+[02 Basic Usage](02_basic.Rmd)
+[03 Several Output Formats]()
+[04 Presentations]()
+[05 Shiny + widgets]()
+
 ## Running 
 
 ### On Binder
@@ -24,6 +30,7 @@ usethis::use_course("https://github.com/uribo/hello_rmarkdown/archive/master.zip
 
 - [R Markdown Official Site](http://rmarkdown.rstudio.com/index.html)
 - [Dynamic Documents with R and Knitr](https://github.com/yihui/knitr-book)
+- [Escape the Land of LaTeX / Word for Statistical Reporting](https://github.com/rstudio/webinars/blob/master/13-R-Markdown-Ecosystem/13-R-Markdown-Ecosystem.pdf)
 - 高橋康介 (2014) 共立出版. [ドキュメント・プレゼンテーション生成](http://www.kyoritsu-pub.co.jp/bookdetail/9784320123724)
 
 ## Session Information
