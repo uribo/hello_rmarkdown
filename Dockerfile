@@ -1,11 +1,10 @@
 FROM rocker/binder:3.4.2
-MAINTAINER "Shinya Uryu" <suika1127@gmail.com>
 
-RUN apt-get update
+# Copy repo into ${HOME}, make user own $HOME
+USER root
+COPY . ${HOME}
+RUN chown -R ${NB_USER} ${HOME}
+USER ${NB_USER}
 
-RUN install2.r \
-  jpmesh \
-  rmarkdown \
-  tinytex \
-  remotes
-
+## run any install.R script we find
+RUN if [ -f install.R ]; then R --quiet -f install.R; fi
