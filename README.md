@@ -9,7 +9,7 @@ Author: Shinya Uryu ([@uribo](https://github.com/uribo))
 [04 Presentations]()
 [05 Shiny + widgets]()
 
-## Running 
+## Running
 
 ### On Binder
 
@@ -31,7 +31,12 @@ usethis::use_course("https://github.com/uribo/hello_rmarkdown/archive/master.zip
 - [R Markdown Official Site](http://rmarkdown.rstudio.com/index.html)
 - [Dynamic Documents with R and Knitr](https://github.com/yihui/knitr-book)
 - [Escape the Land of LaTeX / Word for Statistical Reporting](https://github.com/rstudio/webinars/blob/master/13-R-Markdown-Ecosystem/13-R-Markdown-Ecosystem.pdf)
+- [R Markdown: The Definitive Guide (under development)
+](https://github.com/rstudio/rmarkdown-book)
+- [R for Data Science: R Markdown](http://r4ds.had.co.nz/r-markdown.html)
 - 高橋康介 (2014) 共立出版. [ドキュメント・プレゼンテーション生成](http://www.kyoritsu-pub.co.jp/bookdetail/9784320123724)
+- [Qiita\@kazutanの投稿](https://qiita.com/kazutan)
+- [R Markdownによるスライド生成](https://kazutan.github.io/SappoRoR6/rmd_slide.html#/)
 
 ## Session Information
 
