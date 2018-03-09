@@ -3,13 +3,20 @@ Hello R Markdonw :)
 
 Author: Shinya Uryu ([\@uribo](https://github.com/uribo))
 
-![](inst/slide_overview.jpg)
-
+[![](inst/slide_overview.jpg)](slides/slide.pdf)
 
 - [01 Introduction](01_hello.Rmd)
 - [02 Basic Usage](02_basic.Rmd)
 - [03 Several Output Formats]()
-- [04 Presentations]()
+
+![](inst/presentation_gallery.png)
+
+- 04 Presentations
+    - [Beamer](04_presentation/04_beamer.pdf)
+    - [ioslides](https://cdn.rawgit.com/uribo/hello_rmarkdown/a7c2b68a/04_presentation/04_ioslides.html)
+    - [Reveal.js](https://cdn.rawgit.com/uribo/hello_rmarkdown/a7c2b68a/04_presentation/04_revealjs.html)
+    - [slidy](https://cdn.rawgit.com/uribo/hello_rmarkdown/a7c2b68a/04_presentation/04_slidy.html)
+    - [xaringan](https://cdn.rawgit.com/uribo/hello_rmarkdown/a7c2b68a/04_presentation/04_xaringan.html)
 - [05 Shiny + widgets]()
 
 ## Running
@@ -40,6 +47,11 @@ usethis::use_course("https://github.com/uribo/hello_rmarkdown/archive/master.zip
 - 高橋康介 (2014) 共立出版. [ドキュメント・プレゼンテーション生成](http://www.kyoritsu-pub.co.jp/bookdetail/9784320123724)
 - [Qiita\@kazutanの投稿](https://qiita.com/kazutan)
 - [R Markdownによるスライド生成](https://kazutan.github.io/SappoRoR6/rmd_slide.html#/)
+- Presentations
+    - [Presentations with Beamer
+](https://rmarkdown.rstudio.com/beamer_presentation_format.html)
+    - [Presentations with ioslides](https://rmarkdown.rstudio.com/ioslides_presentation_format.html)
+    - [Presentations with reveal.js](https://rmarkdown.rstudio.com/revealjs_presentation_format.html)
 
 ## Session Information
 
