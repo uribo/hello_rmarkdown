@@ -1,0 +1,211 @@
+---
+title: "jpmesh: Utilities for Japanese Mesh Code"
+author: "Shinya Uryu"
+date: "2018/3/8"
+header-includes:
+  - \definecolor{Black1}{RGB}{43,40,40}
+  - \definecolor{Blue1}{RGB}{48, 122, 190}
+  - \definecolor{Blue2}{RGB}{99, 151, 205}
+  - \definecolor{White1}{RGB}{255,255,243}
+  - \definecolor{Grey1}{RGB}{164, 173, 185}
+  - \definecolor{Grey2}{RGB}{244, 244, 244}
+  - \setbeamerfont{title}{size = \fontsize{32}{10}}
+  - \setbeamercolor{title}{fg = Blue1}
+  - \setbeamerfont{subtitle}{size = \Large}
+  - \setbeamercolor{subtitle}{fg = Blue2}
+  - \setbeamercolor{author}{fg = Black1}
+  - \setbeamercolor{normal text}{fg = Black1}
+  - \setbeamerfont{date}{series = \itshape}
+  - \setbeamercolor{date}{fg = Grey1}
+  - \setbeamercolor{frametitle}{fg = Blue1}
+  - \setbeamerfont{frametitle}{size = \Large}
+  - \setbeamerfont{footnote}{size = \tiny}
+  - \setbeamercolor{enumerate item}{fg = Blue2}
+output:
+  beamer_presentation:
+    toc: true
+    slide_level: 2
+    fonttheme: "structurebold"
+    keep_tex: false
+    fig_width: 4
+    fig_height: 3.7
+    fig_caption: true
+    includes:
+      in_header: header.tex
+    pandoc_args:
+     ["--latex-engine=xelatex"]
+    df_print: kable
+# mainfont: Helvetica Neue
+# monofont: Ricty
+incremental: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+\center{
+  \Huge{\textbf{\textcolor{magenta}{jpmesh}}}
+}
+
+---
+
+## jpmesh
+
+The **jpmesh** is a package that makes it easy to use "regional mesh (i.e. mesh code _JIS X 0410_ )" used in Japan from R. Regional mesh is a code given when subdividing Japanese landscape into rectangular subregions by latitude and longitude. Depending on the accuracy of the code, different regional mesh length. By using the same mesh in statistical survey etc., it will become possible to handle the survey results of a large area in the area mesh unit.
+
+## jpmesh
+
+In jpmesh, mesh codes and latitude and longitude coordinates are compatible with mesh codes from the first region mesh, which is the standard region mesh, to the quarter regional mesh of the divided region mesh (from 80 km to 125 m). Features include "conversion from latitude and longitude to regional mesh", "acquisition of latitude and longitude from regional mesh", "mapping on prefecture unit and leaflet".
+
+---
+
+\center{
+  \Huge{\textbf{\textcolor{magenta}{Usage}}}
+}
+
+---
+
+## Install
+
+Available CRAN (`version 1.1.0`), and olso GitHub develop versions.
+
+```{r, eval = FALSE, echo = TRUE}
+# CRAN
+install.packages("jpmesh")
+```
+
+```{r, eval = FALSE, echo = TRUE}
+# the development version from GitHub:
+install.packages("remotes")
+remotes::install_github("uribo/jpmesh")
+```
+
+```{r, echo = TRUE, message = FALSE}
+library(jpmesh)
+library(sf)
+library(leaflet)
+```
+
+## Convert mesh code to coordinate and vice versa 
+
+Return the _latitude_ and _longitude_ for specifying the mesh range from the mesh code.
+
+```{r}
+mesh_to_coords(5133) # 80km
+```
+
+```{r, results = "hide"}
+mesh_to_coords(513377) # 10km
+# ...
+mesh_to_coords(51337783123) # 125m
+```
+
+## Convert mesh code to coordinate and vice versa 
+
+Find the mesh code within the range from _latitude_ and _longitude_.
+
+```{r}
+coords_to_mesh(133, 34) # default as 1km meshcode
+coords_to_mesh(133, 34, mesh_size = "80km")
+coords_to_mesh(133, 34, mesh_size = "125m")
+```
+
+## Detect fine and neighborhood mesh codes
+
+```{r}
+mesh_80km <- coords_to_mesh(133, 34, "80km")
+# Convert to sfc_POLYGON
+mesh_polygon <- mesh_80km %>% 
+  export_mesh()
+
+mesh_polygon
+```
+
+## Detect fine and neighborhood mesh codes
+
+```{r}
+mesh_polygon %>% 
+  st_geometry() %>% 
+  plot()
+```
+
+## Detect fine and neighborhood mesh codes 
+
+```{r}
+# Returns a finer mesh of the area of the mesh codes
+# Such as, 80km to 10km mesh codes.
+meshes_10km <- mesh_80km %>% 
+  fine_separate()
+
+meshes_10km
+```
+
+## Detect fine and neighborhood mesh codes 
+
+```{r}
+meshes_10km %>% 
+  export_meshes() %>% 
+  plot()
+```
+
+## Detect fine and neighborhood mesh codes
+
+```{r}
+# the value of the adjacent mesh codes
+coords_to_mesh(133, 34, "80km") %>% 
+  neighbor_mesh()
+```
+
+```{r, results = 'hide'}
+coords_to_mesh(133, 34, "500m") %>% 
+  neighbor_mesh()
+```
+
+
+## Detect fine and neighborhood mesh codes 
+
+```{r, fig.cap = "1km neighborhood meshes", fig.align = "right"}
+mesh_1km_neighbors <- coords_to_mesh(133, 34, "1km") %>% 
+  neighbor_mesh()
+mesh_1km_neighbors %>% 
+  export_meshes() %>% 
+  st_geometry() %>% 
+  plot()
+```
+
+---
+
+\center{
+  \Huge{\textbf{\textcolor{magenta}{Plots and Visualize}}}
+}
+
+---
+
+## ggplot2 {.smaller .build}
+
+```{r, eval = FALSE, echo = TRUE}
+remotes::install_github("hadley/ggplot2")
+
+library(ggplot2)
+```
+
+```{r, include = FALSE}
+library(ggplot2)
+```
+
+```{r, fig.align = 'right'}
+ggplot() +
+  geom_sf(data = mesh_1km_neighbors %>% 
+  export_meshes(), aes(fill = meshcode)) +
+  theme_bw()
+```
+
+## Administration mesh 
+
+```{r}
+set.seed(71)
+# Select prefecture or city code
+administration_mesh(code = 33, type = "prefecture") %>% 
+  sample(5)
+```

@@ -1,0 +1,236 @@
+---
+title: "jpmesh"
+subtitle: "Utilities for Japanese Mesh Code"
+author: "Shinya Uryu"
+date: "2018/3/8"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, metropolis, metropolis-fonts]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+    fig_width: 4
+    fig_height: 3.7
+    fig_caption: true
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+background-image: url('https://github.com/uribo/jpmesh/blob/master/man/figures/logo.png?raw=true')
+background-position: 30% 45%
+class: inverse, center, middle
+
+# jpmesh
+
+---
+
+# Overview
+
+The **jpmesh** is a package that makes it easy to use "regional mesh (i.e. mesh code _JIS X 0410_ )" used in Japan from R. Regional mesh is a code given when subdividing Japanese landscape into rectangular subregions by latitude and longitude. Depending on the accuracy of the code, different regional mesh length. By using the same mesh in statistical survey etc., it will become possible to handle the survey results of a large area in the area mesh unit.
+
+--
+
+In jpmesh, mesh codes and latitude and longitude coordinates are compatible with mesh codes from the first region mesh, which is the standard region mesh, to the quarter regional mesh of the divided region mesh (from 80 km to 125 m). Features include "conversion from latitude and longitude to regional mesh", "acquisition of latitude and longitude from regional mesh", "mapping on prefecture unit and leaflet".
+
+
+---
+class: inverse, center, middle
+
+# Usage
+
+---
+
+# Install
+
+Available CRAN (`version 1.1.0`), and olso GitHub develop versions.
+
+```{r, eval = FALSE, echo = TRUE}
+# CRAN
+install.packages("jpmesh")
+```
+
+--
+
+```{r, eval = FALSE, echo = TRUE}
+# the development version from GitHub:
+install.packages("remotes")
+remotes::install_github("uribo/jpmesh")
+```
+
+--
+
+```{r, echo = TRUE, message = FALSE}
+library(jpmesh)
+library(sf)
+library(leaflet)
+```
+
+---
+
+# Convert mesh code to coordinate and vice versa
+
+Return the `latitude` and `longitude` for specifying the mesh range from the mesh code.
+
+```{r}
+mesh_to_coords(5133) # 80km
+```
+
+```{r, results = "hide"}
+mesh_to_coords(513377) # 10km
+# ...
+mesh_to_coords(51337783123) # 125m
+```
+
+---
+
+Find the mesh code within the range from `latitude` and `longitude`.
+
+```{r}
+coords_to_mesh(133, 34) # default as 1km meshcode
+coords_to_mesh(133, 34, mesh_size = "80km")
+coords_to_mesh(133, 34, mesh_size = "125m")
+```
+
+---
+
+# Detect fine and neighborhood mesh codes
+
+```{r}
+mesh_80km <- coords_to_mesh(133, 34, "80km")
+# Convert to sfc_POLYGON
+mesh_polygon <- mesh_80km %>% 
+  export_mesh()
+
+mesh_polygon
+```
+
+---
+
+.pull-left[
+```{r}
+mesh_80km <- coords_to_mesh(133, 34, "80km")
+# Convert to sfc_POLYGON
+mesh_polygon <- mesh_80km %>% 
+  export_mesh()
+```
+]
+
+.pull-right[
+```{r, dev = "svg"}
+mesh_polygon %>% 
+  st_geometry() %>% 
+  plot()
+```
+```
+]
+
+---
+
+.pull-left[
+```{r}
+# Returns a finer mesh of the area of the mesh codes
+# Such as, 80km to 10km mesh codes.
+meshes_10km <- mesh_80km %>% 
+  fine_separate()
+
+meshes_10km
+```
+]
+
+.pull-right[
+```{r, dev = "svg"}
+meshes_10km %>% 
+  export_meshes() %>% 
+  plot()
+```
+```
+]
+
+---
+
+```{r}
+# the value of the adjacent mesh codes
+coords_to_mesh(133, 34, "80km") %>% 
+  neighbor_mesh()
+
+coords_to_mesh(133, 34, "500m") %>% 
+  neighbor_mesh()
+```
+
+---
+
+```{r, fig.cap = "1km neighborhood meshes", fig.align = "right"}
+mesh_1km_neighbors <- coords_to_mesh(133, 34, "1km") %>% 
+  neighbor_mesh()
+mesh_1km_neighbors %>% 
+  export_meshes() %>% 
+  st_geometry() %>% 
+  plot()
+```
+
+---
+class: inverse, center, middle
+
+# Plots and Visualize
+
+---
+
+# ggplot2
+
+```{r, eval = FALSE, echo = TRUE}
+remotes::install_github("hadley/ggplot2")
+
+library(ggplot2)
+
+ggplot() +
+  geom_sf(data = mesh_1km_neighbors %>% 
+  export_meshes(), aes(fill = meshcode)) +
+  theme_bw()
+```
+
+---
+
+# ggplot2
+
+```{r, echo = FALSE, fig.width = 5, dev = "svg"}
+library(ggplot2)
+
+ggplot() +
+  geom_sf(data = mesh_1km_neighbors %>% 
+  export_meshes(), aes(fill = meshcode)) +
+  theme_bw()
+```
+
+---
+
+# Administration mesh
+
+```{r, eval = FALSE, echo = TRUE}
+set.seed(71)
+# Select prefecture or city code
+administration_mesh(code = 33, type = "prefecture") %>% 
+  sample(5)
+```
+
+```{r, echo = FALSE, out.height="40%"}
+set.seed(71)
+administration_mesh(code = 33, type = "prefecture") %>% 
+  sample(5) %>% 
+  knitr::kable(format = "html")
+```
+
+
+---
+
+# Mapping on Leaflet
+
+```{r, out.width = '100%', out.height = "40%", fig.height=6, eval = require('leaflet')}
+leaflet() %>% 
+  addTiles() %>% 
+  addProviderTiles("OpenStreetMap.BlackAndWhite") %>% 
+  addPolygons(data = administration_mesh(code = 33101, type = "city"))
+```
