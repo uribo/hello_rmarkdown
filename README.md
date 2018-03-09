@@ -1,4 +1,4 @@
-Hello R Markdonw :)
+Hello R Markdown :)
 ===================
 
 Author: Shinya Uryu ([\@uribo](https://github.com/uribo))
